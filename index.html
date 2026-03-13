@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>いーすと</title>
+  <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=M+PLUS+Rounded+1c:wght@400;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --blue-deep:   #1a3a5c;
+      --blue-mid:    #2a6fa8;
+      --blue-bright: #3fb8f0;
+      --blue-pale:   #e0f5ff;
+      --accent:      #ff7eb3;
+      --accent2:     #ffe566;
+      --text:        #1a2e40;
+      --text-soft:   #4a6a85;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'M PLUS Rounded 1c', sans-serif;
+      background: var(--blue-pale);
+      color: var(--text);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed; inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 10% 0%, #b8e8ff88 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 90% 100%, #c5f0ff66 0%, transparent 60%);
+      pointer-events: none; z-index: 0;
+    }
+
+    .bubbles { position: fixed; inset: 0; pointer-events: none; z-index: 0; overflow: hidden; }
+    .bubble {
+      position: absolute; border-radius: 50%;
+      background: radial-gradient(circle at 35% 35%, #ffffffcc, #3fb8f044);
+      border: 1.5px solid #3fb8f055;
+      animation: floatUp linear infinite;
+    }
+    @keyframes floatUp {
+      0%   { transform: translateY(0) scale(1); opacity: 0.7; }
+      100% { transform: translateY(-110vh) scale(1.1); opacity: 0; }
+    }
+
+    .container {
+      position: relative; z-index: 1;
+      max-width: 860px; margin: 0 auto; padding: 0 20px 60px;
+    }
+
+    /* ── ヘッダー ── */
+    header { text-align: center; padding: 56px 0 32px; }
+
+    .avatar-ring {
+      width: 110px; height: 110px; border-radius: 50%; margin: 0 auto 20px;
+      background: linear-gradient(135deg, var(--blue-bright), var(--accent));
+      display: flex; align-items: center; justify-content: center; font-size: 52px;
+      box-shadow: 0 0 0 6px #ffffffcc, 0 8px 32px #3fb8f055;
+      animation: pulse 3s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%,100% { box-shadow: 0 0 0 6px #ffffffcc, 0 8px 32px #3fb8f055; }
+      50%      { box-shadow: 0 0 0 10px #ffffff99, 0 8px 40px #3fb8f088; }
+    }
+
+    header h1 {
+      font-family: 'Nunito', sans-serif; font-size: 2.6rem; font-weight: 900;
+      background: linear-gradient(90deg, var(--blue-mid), var(--blue-bright));
+      -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+    }
+    .tagline { margin-top: 8px; font-size: 0.95rem; color: var(--text-soft); font-weight: 700; }
+
+    .sns-row { display: flex; justify-content: center; gap: 12px; margin-top: 24px; flex-wrap: wrap; }
+    .sns-btn {
+      display: inline-flex; align-items: center; gap: 7px;
+      padding: 9px 20px; border-radius: 50px;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.88rem;
+      text-decoration: none; transition: transform 0.18s, box-shadow 0.18s;
+      box-shadow: 0 3px 12px #00000015;
+    }
+    .sns-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 20px #00000020; }
+    .sns-btn.youtube { background: #ff4e4e; color: #fff; }
+    .sns-btn.twitch  { background: #9147ff; color: #fff; }
+    .sns-btn.twitter { background: #1da1f2; color: #fff; }
+
+    /* ── セクション共通 ── */
+    section {
+      background: #ffffffcc; backdrop-filter: blur(12px);
+      border-radius: 20px; padding: 28px 32px; margin-top: 24px;
+      box-shadow: 0 4px 24px #2a6fa810; border: 1.5px solid #3fb8f030;
+    }
+    .sec-title {
+      font-family: 'Nunito', sans-serif; font-size: 1.05rem; font-weight: 900;
+      color: var(--blue-mid); letter-spacing: 0.06em; text-transform: uppercase;
+      margin-bottom: 18px; display: flex; align-items: center; gap: 8px;
+    }
+    .sec-title::before {
+      content: ''; width: 4px; height: 18px;
+      background: linear-gradient(180deg, var(--blue-bright), var(--accent));
+      border-radius: 4px; flex-shrink: 0;
+    }
+
+    /* ── スケジュール ── */
+    .schedule-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 480px) { .schedule-grid { grid-template-columns: 1fr; } }
+
+    .sched-card {
+      background: linear-gradient(135deg, var(--blue-pale), #d0eeff);
+      border-radius: 14px; padding: 16px 18px; border: 1.5px solid #3fb8f040;
+    }
+    .sched-day {
+      font-family: 'Nunito', sans-serif; font-weight: 900; font-size: 0.8rem;
+      color: var(--blue-mid); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .sched-content { font-weight: 700; font-size: 1rem; color: var(--blue-deep); }
+    .sched-note { font-size: 0.78rem; color: var(--text-soft); margin-top: 3px; }
+    .tag {
+      display: inline-block; color: #fff;
+      font-family: 'Nunito', sans-serif; font-weight: 800; font-size: 0.7rem;
+      padding: 2px 9px; border-radius: 20px; margin-top: 6px; background: var(--blue-bright);
+    }
+    .tag.fps    { background: #9147ff; }
+    .tag.puzzle { background: var(--accent); }
+
+    /* ── プロフィール ── */
+    .profile-text { font-size: 0.95rem; line-height: 1.9; color: var(--text); font-weight: 600; }
+    .highlight { background: linear-gradient(180deg, transparent 60%, #ffe56688 60%); font-weight: 800; }
+
+    /* ── アーカイブ ── */
+    .setup-box {
+      background: linear-gradient(135deg, #fffbe6, #fff3b0);
+      border: 1.5px solid #ffe566; border-radius: 14px;
+      padding: 18px 22px; margin-bottom: 20px; line-height: 1.85;
+      font-size: 0.85rem; color: #5a4800; font-weight: 600;
+    }
+    .setup-box strong { color: #3a3000; font-weight: 800; }
+    .setup-box code {
+      background: #ffec80; padding: 1px 7px;
+      border-radius: 4px; font-family: monospace; font-size: 0.9em;
+    }
+    .setup-box ol { padding-left: 20px; margin-top: 8px; }
+    .setup-box li { margin-bottom: 4px; }
+
+    .tab-row { display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    .tab-btn {
+      padding: 6px 16px; border-radius: 20px; border: 2px solid #3fb8f060;
+      background: transparent; font-family: 'M PLUS Rounded 1c', sans-serif;
+      font-weight: 700; font-size: 0.85rem; color: var(--text-soft);
+      cursor: pointer; transition: all 0.18s;
+    }
+    .tab-btn.active { background: var(--blue-bright); color: #fff; border-color: var(--blue-bright); }
+    .tab-btn:hover:not(.active) { border-color: var(--blue-bright); color: var(--blue-mid); }
+
+    .video-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 14px;
+    }
+    .video-card {
+      background: linear-gradient(135deg, var(--blue-pale), #d0eeff);
+      border-radius: 14px; overflow: hidden; border: 1.5px solid #3fb8f040;
+      text-decoration: none; color: var(--text); display: block;
+      transition: transform 0.18s, box-shadow 0.18s;
+    }
+    .video-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px #2a6fa820; }
+    .video-card img { width: 100%; aspect-ratio: 16/9; object-fit: cover; display: block; }
+    .video-info { padding: 10px 12px 12px; }
+    .video-title {
+      font-weight: 700; font-size: 0.83rem; line-height: 1.45;
+      display: -webkit-box; -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical; overflow: hidden;
+    }
+    .video-date { font-size: 0.73rem; color: var(--text-soft); margin-top: 5px; font-weight: 600; }
+
+    .status-msg { text-align: center; padding: 32px; color: var(--text-soft); font-weight: 700; font-size: 0.9rem; }
+    .error-box {
+      background: #fff0f5; border: 1.5px solid #ffb3cc; border-radius: 12px;
+      padding: 16px 20px; font-size: 0.85rem; color: #c0446a; font-weight: 700; line-height: 1.8;
+    }
+
+    footer { text-align: center; margin-top: 40px; font-size: 0.78rem; color: var(--text-soft); font-weight: 600; }
+  </style>
+</head>
+<body>
+
+<div class="bubbles" id="bubbles"></div>
+
+<div class="container">
+
+  <header>
+    <div class="avatar-ring">🎮</div>
+    <h1>いーすと</h1>
+    <p class="tagline">謎解きゲーム ＆ FPS練習中 🔫🧩</p>
+    <div class="sns-row">
+      <a class="sns-btn youtube" href="https://www.youtube.com/@east3desu" target="_blank">▶ YouTube</a>
+      <a class="sns-btn twitch"  href="https://www.twitch.tv/east3desu"   target="_blank">● Twitch</a>
+      <a class="sns-btn twitter" href="https://twitter.com/east3desu"     target="_blank">𝕏 Twitter</a>
+    </div>
+  </header>
+
+  <section>
+    <div class="sec-title">配信スケジュール</div>
+    <div class="schedule-grid">
+      <div class="sched-card">
+        <div class="sched-day">平日（月〜木）</div>
+        <div class="sched-content">FPS配信</div>
+        <div class="sched-note">帰宅後 21〜22時ごろ / Twitch</div>
+        <div class="tag fps">FPS</div>
+      </div>
+      <div class="sched-card">
+        <div class="sched-day">金曜夜</div>
+        <div class="sched-content">謎解きゲーム</div>
+        <div class="sched-note">夜 / YouTube</div>
+        <div class="tag puzzle">謎解き</div>
+      </div>
+    </div>
+    <p style="font-size:0.8rem; color:var(--text-soft); margin-top:14px; font-weight:600;">
+      ※ 開始時刻は当日のTwitterで告知します。
+    </p>
+  </section>
+
+  <section>
+    <div class="sec-title">プロフィール</div>
+    <p class="profile-text">
+      謎解きゲームが大好きな配信者。<br>
+      金曜夜はYouTubeで<span class="highlight">ストーリー謎解きゲーム</span>をまったり配信中。<br>
+      平日夜はTwitchで<span class="highlight">FPS練習</span>…下手なりに頑張ってます🙏<br>
+      兼業なので不定期ですが、のんびり見ていただけると嬉しいです！
+    </p>
+  </section>
+
+  <section>
+    <div class="sec-title">配信アーカイブ</div>
+
+    <div class="setup-box" id="setupGuide">
+      <strong>⚙️ 初回設定：3箇所だけ書き換えてください</strong><br>
+      このファイルをテキストエディタで開き、下記3行を書き換えると動画が自動表示されます：<br><br>
+      <code>const YT_API_KEY    = 'ここにAPIキーを貼る';</code><br>
+      <code>const YT_MAIN_CH_ID = 'メインチャンネルIDを貼る';</code><br>
+      <code>const YT_SUB_CH_ID  = 'サブチャンネルIDを貼る';</code><br><br>
+      <strong>YouTube Data API v3 キーの取得手順：</strong>
+      <ol>
+        <li><a href="https://console.cloud.google.com/" target="_blank" style="color:var(--blue-mid);">Google Cloud Console</a> でプロジェクトを作成</li>
+        <li>「APIとサービス」→「ライブラリ」→「YouTube Data API v3」を有効化</li>
+        <li>「認証情報」→「APIキーを作成」でキーをコピーして上の行に貼り付け</li>
+        <li>チャンネルIDは各チャンネルの「設定 → 詳細設定」で確認できます</li>
+      </ol>
+    </div>
+
+    <div class="tab-row">
+      <button class="tab-btn active" id="tabMain" onclick="switchChannel('main', this)">🧩 謎解き（メイン）</button>
+      <button class="tab-btn" id="tabSub"          onclick="switchChannel('sub',  this)">🔫 FPS・アーカイブ（サブ）</button>
+    </div>
+
+    <div id="videoGrid" class="video-grid">
+      <div class="status-msg">⏳ 動画を読み込み中…</div>
+    </div>
+  </section>
+
+  <footer>© いーすと — 無断転載禁止</footer>
+</div>
+
+<script>
+  // =====================================================
+  // ★ここを書き換えてください★
+  const YT_API_KEY    = 'YOUR_API_KEY_HERE';
+  const YT_MAIN_CH_ID = 'YOUR_MAIN_CHANNEL_ID_HERE';  // 謎解きメインch
+  const YT_SUB_CH_ID  = 'YOUR_SUB_CHANNEL_ID_HERE';   // FPS・アーカイブサブch
+  // =====================================================
+
+  const cache = { main: null, sub: null };
+
+  const isConfigured =
+    YT_API_KEY    !== 'YOUR_API_KEY_HERE' &&
+    YT_MAIN_CH_ID !== 'YOUR_MAIN_CHANNEL_ID_HERE' &&
+    YT_SUB_CH_ID  !== 'YOUR_SUB_CHANNEL_ID_HERE';
+
+  if (isConfigured) {
+    document.getElementById('setupGuide').style.display = 'none';
+    switchChannel('main', document.getElementById('tabMain'));
+  } else {
+    document.getElementById('videoGrid').innerHTML =
+      '<div class="status-msg">👆 上の手順で設定すると、ここに動画一覧が自動表示されます</div>';
+  }
+
+  async function switchChannel(ch, btn) {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    if (!isConfigured) return;
+
+    if (cache[ch]) { renderVideos(cache[ch]); return; }
+
+    const chId = ch === 'main' ? YT_MAIN_CH_ID : YT_SUB_CH_ID;
+    const grid = document.getElementById('videoGrid');
+    grid.innerHTML = '<div class="status-msg">⏳ 動画を読み込み中…</div>';
+
+    try {
+      const chRes  = await fetch(`https://www.googleapis.com/youtube/v3/channels?part=contentDetails&id=${chId}&key=${YT_API_KEY}`);
+      const chData = await chRes.json();
+      if (!chData.items || chData.items.length === 0) throw new Error('チャンネルが見つかりません');
+
+      const playlistId = chData.items[0].contentDetails.relatedPlaylists.uploads;
+
+      const plRes  = await fetch(`https://www.googleapis.com/youtube/v3/playlistItems?part=snippet&maxResults=50&playlistId=${playlistId}&key=${YT_API_KEY}`);
+      const plData = await plRes.json();
+      if (!plData.items) throw new Error('動画の取得に失敗しました');
+
+      cache[ch] = plData.items.map(item => ({
+        id:        item.snippet.resourceId.videoId,
+        title:     item.snippet.title,
+        thumbnail: item.snippet.thumbnails?.medium?.url || item.snippet.thumbnails?.default?.url,
+        date:      new Date(item.snippet.publishedAt).toLocaleDateString('ja-JP')
+      }));
+
+      renderVideos(cache[ch]);
+    } catch (e) {
+      grid.innerHTML = `<div class="error-box">
+        ⚠️ 動画の読み込みに失敗しました。APIキーまたはチャンネルIDを確認してください。<br>
+        <small style="font-weight:400;opacity:0.8">${e.message}</small>
+      </div>`;
+    }
+  }
+
+  function renderVideos(videos) {
+    const grid = document.getElementById('videoGrid');
+    if (videos.length === 0) {
+      grid.innerHTML = '<div class="status-msg">動画が見つかりませんでした</div>';
+      return;
+    }
+    grid.innerHTML = videos.map(v => `
+      <a class="video-card" href="https://www.youtube.com/watch?v=${v.id}" target="_blank">
+        <img src="${v.thumbnail}" alt="${v.title}" loading="lazy">
+        <div class="video-info">
+          <div class="video-title">${v.title}</div>
+          <div class="video-date">${v.date}</div>
+        </div>
+      </a>
+    `).join('');
+  }
+
+  // 泡の生成
+  const wrap = document.getElementById('bubbles');
+  for (let i = 0; i < 18; i++) {
+    const b = document.createElement('div');
+    b.className = 'bubble';
+    const size = 20 + Math.random() * 60;
+    b.style.cssText = `
+      width:${size}px; height:${size}px;
+      left:${Math.random()*100}%;
+      bottom:${-10 - Math.random()*20}%;
+      animation-duration:${8 + Math.random()*14}s;
+      animation-delay:${Math.random()*10}s;
+      opacity:${0.3 + Math.random()*0.4};
+    `;
+    wrap.appendChild(b);
+  }
+</script>
+</body>
+</html>
